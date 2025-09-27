@@ -6,10 +6,18 @@ const Create = () => {
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [author, setAuthor] = useState('')
+  const [error, setError] = useState('')
   const navigate = useNavigate()
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (body.length <= 250) {
+      setError("Blog content must be more than 250 characters.")
+      return;
+    }
+    setError('')
     const publishdate = new Date()
     const blog = { title, body, author, publishdate }
 
@@ -88,8 +96,11 @@ const Create = () => {
             {/* Blog Body */}
             <div>
               <label htmlFor="blog-body" className="block mb-3 text-lg font-semibold text-gray-800">
-                Blog Content
-              </label>
+                Blog Content (more than 150 Characters)
+              </label><p className={`ml-auto font-medium ${body.length > 150 ? 'text-green-600' : 'text-gray-500'}`}>
+                {body.length} Characters
+              </p>
+
               <textarea
                 id="blog-body"
                 rows="12"
@@ -99,6 +110,12 @@ const Create = () => {
                 className="w-full px-4 py-4 text-lg transition-all duration-300 border-2 border-gray-200 resize-none rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                 placeholder="Start writing your amazing content here... Share your thoughts, experiences, and insights..."
               ></textarea>
+
+              <div className="flex justify-between mt-2 text-sm">
+                {/* Display Error Message */}
+                {error && <p className="font-semibold text-red-500">{error}</p>}
+              </div>
+
               <div className="mt-2 text-sm text-gray-500">
                 Tip: Write from your heart and share what matters to you!
               </div>

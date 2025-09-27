@@ -8,24 +8,24 @@ const Blogdetails = () => {
     const navigate = useNavigate();
 
 
-   const handleclick = () => {
-   
-    const permanentIds = ['1', '2', '3'];
+    const handleclick = () => {
 
- 
-    if (permanentIds.includes(blog.id.toString())) {
-        alert("This is a default blog and cannot be deleted.");
-        return;
+        const permanentIds = ['1', '2', '3'];
+
+
+        if (permanentIds.includes(blog.id.toString())) {
+            alert("This is a default blog and cannot be deleted.");
+            return;
+        }
+        fetch('http://localhost:8000/blogs/' + blog.id, {
+            method: "DELETE",
+        }).then(() => {
+            navigate('/');
+        });
     }
-    fetch('http://localhost:8000/blogs/' + blog.id, {
-        method: "DELETE",
-    }).then(() => {
-        navigate('/');
-    });
-}
 
     return (
-        <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
                 {/* Loading State */}
                 {isPending && (
@@ -41,11 +41,11 @@ const Blogdetails = () => {
                 {/* Error State */}
                 {error && (
                     <div className="flex flex-col items-center justify-center py-20">
-                        <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md text-center">
-                            <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="max-w-md p-8 text-center border border-red-200 rounded-lg bg-red-50">
+                            <svg className="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <h2 className="text-2xl font-bold text-red-700 mb-2">Oops! Something went wrong</h2>
+                            <h2 className="mb-2 text-2xl font-bold text-red-700">Oops! Something went wrong</h2>
                             <p className="text-red-600">{error}</p>
                         </div>
                     </div>
@@ -53,31 +53,31 @@ const Blogdetails = () => {
 
                 {/* Blog Content */}
                 {blog && (
-                    <article className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                    <article className="overflow-hidden bg-white border border-gray-100 shadow-xl rounded-2xl">
                         {/* Header with gradient */}
-                        <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500 px-8 py-12 text-center">
-                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+                        <div className="px-8 py-12 text-center bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500">
+                            <h1 className="mb-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
                                 {blog.title}
                             </h1>
-                            
+
                             {/* Author and Date Info */}
-                            <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-blue-100">
+                            <div className="flex flex-col items-center justify-center space-y-2 text-blue-100 sm:flex-row sm:space-y-0 sm:space-x-6">
                                 <div className="flex items-center">
                                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                         <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                                     </svg>
                                     <span className="text-lg font-medium">By {blog.author}</span>
                                 </div>
-                                
+
                                 {blog.publishdate && (
                                     <div className="flex items-center">
                                         <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                                         </svg>
-                                        <span>Published on {new Date(blog.publishdate).toLocaleDateString('en-US', { 
-                                            year: 'numeric', 
-                                            month: 'long', 
-                                            day: 'numeric' 
+                                        <span>Published on {new Date(blog.publishdate).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
                                         })}</span>
                                     </div>
                                 )}
@@ -88,27 +88,27 @@ const Blogdetails = () => {
                         <div className="px-8 py-12">
                             {/* Blog About Section */}
                             {blog.about && (
-                                <div className="mb-8 p-6 bg-blue-50 rounded-xl border-l-4 border-blue-500">
-                                    <h2 className="text-xl font-semibold text-blue-900 mb-2">About this article</h2>
-                                    <p className="text-blue-800 leading-relaxed">{blog.about}</p>
+                                <div className="p-6 mb-8 border-l-4 border-blue-500 bg-blue-50 rounded-xl">
+                                    <h2 className="mb-2 text-xl font-semibold text-blue-900">About this article</h2>
+                                    <p className="leading-relaxed text-blue-800">{blog.about}</p>
                                 </div>
                             )}
 
                             {/* Main Blog Body */}
                             <div className="prose prose-lg max-w-none">
-                                <div className="text-gray-800 leading-relaxed text-lg whitespace-pre-line">
+                                <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-line">
                                     {blog.body}
                                 </div>
                             </div>
                         </div>
 
                         {/* Footer Actions */}
-                        <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-                            <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+                        <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
+                            <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
                                 {/* Back to Home Button */}
-                                <button 
+                                <button
                                     onClick={() => navigate('/')}
-                                    className="inline-flex items-center px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                                    className="inline-flex items-center px-6 py-3 text-gray-700 transition-all duration-300 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -117,8 +117,8 @@ const Blogdetails = () => {
                                 </button>
 
                                 {/* Delete Button */}
-                                <button 
-                                    className="inline-flex items-center px-6 py-3 text-white bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all duration-300"
+                                <button
+                                    className="inline-flex items-center px-6 py-3 text-white transition-all duration-300 bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
                                     onClick={handleclick}
                                 >
                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

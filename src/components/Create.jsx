@@ -96,8 +96,8 @@ const Create = () => {
             {/* Blog Body */}
             <div>
               <label htmlFor="blog-body" className="block mb-3 text-lg font-semibold text-gray-800">
-                Blog Content (more than 150 Characters)
-              </label><p className={`ml-auto font-medium ${body.length > 150 ? 'text-green-600' : 'text-gray-500'}`}>
+                Blog Content (more than 250 Characters)
+              </label><p className={`ml-auto font-medium ${body.length > 250 ? 'text-green-600' : 'text-gray-500'}`}>
                 {body.length} Characters
               </p>
 

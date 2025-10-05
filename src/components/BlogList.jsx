@@ -15,28 +15,28 @@ const BlogList = ({ blogs, title }) => {
       {/* Blog Grid */}
       <div className="grid gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog) => (
-          <div 
+          <div
             key={blog.id}
             className="overflow-hidden transition-all duration-300 transform bg-white border border-gray-100 shadow-md group rounded-xl hover:shadow-xl hover:border-blue-200 hover:-translate-y-1"
           >
             <Link to={`/blogs/${blog.id}`} className="block">
               {/* Card Header with Gradient */}
               <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500"></div>
-              
+
               {/* Card Content */}
               <div className="p-6">
                 {/* Blog Title */}
                 <h3 className="mb-3 text-xl font-bold text-gray-900 transition-colors duration-300 sm:text-2xl group-hover:text-blue-600 line-clamp-2">
                   {blog.title}
                 </h3>
-                
+
                 {/* Blog About/Preview */}
                 {blog.about && (
                   <p className="mb-4 leading-relaxed text-gray-600 line-clamp-3">
                     {blog.about}
                   </p>
                 )}
-                
+
                 {/* Author Info */}
                 <div className="flex items-center justify-between text-sm text-gray-500">
                   <div className="flex items-center">
@@ -45,7 +45,7 @@ const BlogList = ({ blogs, title }) => {
                     </svg>
                     <span className="font-medium">{blog.author}</span>
                   </div>
-                  
+
                   {/* Publish Date */}
                   {blog.publishdate && (
                     <div className="flex items-center">

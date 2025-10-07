@@ -12,7 +12,7 @@ function App() {
       font-["Poppins"]'>
         <div className='px-4 mx-auto max-w-7xl sm:px-6 lg:px-8'>
           <Navbar />
-          <div className="content">
+          <div className=" content">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Create" element={<Create />} />

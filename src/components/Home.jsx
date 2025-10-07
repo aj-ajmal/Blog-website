@@ -1,10 +1,9 @@
 import BlogList from "../components/BlogList";
 import useFetch from "../components/useFetch";
-import { API_ENDPOINTS } from "../config/api";
 
 const Home = () => {
 
-  const {data:blogs , isPending , error} = useFetch(API_ENDPOINTS.blogs)
+  const {data:blogs , isPending , error} = useFetch('http://localhost:8000/blogs')
 
   return (
     <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">

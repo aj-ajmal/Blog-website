@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { data, useNavigate } from "react-router-dom";
-import { API_ENDPOINTS } from "../config/api";
 
 const Create = () => {
 
@@ -23,7 +22,7 @@ const Create = () => {
     const blog = { title, body, author, publishdate }
 
 
-    fetch(API_ENDPOINTS.createBlog, {
+    fetch('http://localhost:8000/blogs', {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(blog)

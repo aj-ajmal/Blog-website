@@ -1,11 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
-import { API_ENDPOINTS } from "../config/api";
 
 const Blogdetails = () => {
 
     const { id } = useParams()
-    const { data: blog, error, isPending } = useFetch(API_ENDPOINTS.getBlog(id))
+    const { data: blog, error, isPending } = useFetch('http://localhost:8000/blogs/' + id)
     const navigate = useNavigate();
 
 
@@ -18,7 +17,7 @@ const Blogdetails = () => {
             alert("This is a default blog and cannot be deleted.");
             return;
         }
-        fetch(API_ENDPOINTS.deleteBlog(blog.id), {
+        fetch('http://localhost:8000/blogs/' + blog.id, {
             method: "DELETE",
         }).then(() => {
             navigate('/');

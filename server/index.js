@@ -11,7 +11,7 @@ app.use(express.json());
 
 // Root route for health check
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Blog API Server is running!',
     version: '1.0.0',
     endpoints: {
@@ -82,7 +82,7 @@ app.get('/blogs', async (req, res) => {
     res.json(blogs);
   } catch (error) {
     console.error('Error fetching blogs:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to fetch blogs'
     });
@@ -93,26 +93,26 @@ app.get('/blogs', async (req, res) => {
 app.get('/blogs/:id', async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
-    
+
     if (!blog) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         error: 'Blog not found',
         message: `Blog with ID ${req.params.id} does not exist`
       });
     }
-    
+
     res.json(blog);
   } catch (error) {
     console.error('Error fetching blog:', error);
-    
+
     if (error.name === 'CastError') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Invalid blog ID',
         message: 'The provided ID is not valid'
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to fetch blog'
     });
@@ -123,7 +123,7 @@ app.get('/blogs/:id', async (req, res) => {
 app.post('/blogs', async (req, res) => {
   try {
     const { title, author, about, body } = req.body;
-    
+
     // Validation
     if (!title || !author || !body) {
       return res.status(400).json({
@@ -131,14 +131,14 @@ app.post('/blogs', async (req, res) => {
         message: 'Title, author, and body are required'
       });
     }
-    
+
     if (body.length < 250) {
       return res.status(400).json({
         error: 'Content too short',
         message: 'Blog content must be at least 250 characters'
       });
     }
-    
+
     const newBlog = new Blog({
       title,
       author,
@@ -146,20 +146,20 @@ app.post('/blogs', async (req, res) => {
       body,
       publishdate: new Date()
     });
-    
+
     const savedBlog = await newBlog.save();
     res.status(201).json(savedBlog);
   } catch (error) {
     console.error('Error creating blog:', error);
-    
+
     if (error.name === 'ValidationError') {
       return res.status(400).json({
         error: 'Validation error',
         message: error.message
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to create blog'
     });
@@ -170,39 +170,39 @@ app.post('/blogs', async (req, res) => {
 app.put('/blogs/:id', async (req, res) => {
   try {
     const { title, author, about, body } = req.body;
-    
+
     const updatedBlog = await Blog.findByIdAndUpdate(
       req.params.id,
       { title, author, about, body },
       { new: true, runValidators: true }
     );
-    
+
     if (!updatedBlog) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         error: 'Blog not found',
         message: `Blog with ID ${req.params.id} does not exist`
       });
     }
-    
+
     res.json(updatedBlog);
   } catch (error) {
     console.error('Error updating blog:', error);
-    
+
     if (error.name === 'CastError') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Invalid blog ID',
         message: 'The provided ID is not valid'
       });
     }
-    
+
     if (error.name === 'ValidationError') {
       return res.status(400).json({
         error: 'Validation error',
         message: error.message
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to update blog'
     });
@@ -213,29 +213,29 @@ app.put('/blogs/:id', async (req, res) => {
 app.delete('/blogs/:id', async (req, res) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
-    
+
     if (!blog) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         error: 'Blog not found',
         message: `Blog with ID ${req.params.id} does not exist`
       });
     }
-    
-    res.json({ 
+
+    res.json({
       message: 'Blog deleted successfully',
       deletedBlog: blog
     });
   } catch (error) {
     console.error('Error deleting blog:', error);
-    
+
     if (error.name === 'CastError') {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Invalid blog ID',
         message: 'The provided ID is not valid'
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Internal server error',
       message: 'Failed to delete blog'
     });
@@ -264,7 +264,7 @@ const PORT = process.env.PORT || 8000;
 
 const startServer = async () => {
   await connectDB();
-  
+
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📚 API Docs: http://localhost:${PORT}/`);

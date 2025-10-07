@@ -10,7 +10,7 @@ A modern, responsive blog website built with React and Node.js, featuring a beau
 ## ✨ Features
 - 📱 **Responsive Design**: Beautiful on all devices
 - ✍️ **Create Blog Posts**: Rich blog creation interface
-- 📖 **Read Articles**: Elegant blog reading experience  
+- 📖 **Read Articles**: Elegant blog reading experience
 - 🗑️ **Delete Posts**: Manage your content
 - 🎨 **Modern UI**: Tailwind CSS with gradients and animations
 - 🔄 **Real-time Updates**: Instant content updates
@@ -24,7 +24,7 @@ A modern, responsive blog website built with React and Node.js, featuring a beau
 - **Tailwind CSS 4.1.13**: Utility-first CSS framework
 - **React Router 7.9.1**: Client-side routing
 
-### Backend  
+### Backend
 - **Node.js**: Runtime environment
 - **Express 4.18.2**: Web framework
 - **MongoDB Atlas**: Cloud database

@@ -40,7 +40,7 @@ Your blog data will be stored in MongoDB with the following structure:
 1. Go to Clusters > Connect
 2. Choose "Connect your application"
 3. Driver: Node.js, Version: 4.1 or later
-4. Copy connection string: 
+4. Copy connection string:
    ```
    mongodb+srv://bloguser:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
    ```
@@ -69,7 +69,7 @@ Option B: Manual Import
 ### 6. Verify Data Import
 After import, you should see 3 documents in your blogs collection:
 - Atomic Habits (James Clear)
-- Mindset (Carol S. Dweck)  
+- Mindset (Carol S. Dweck)
 - The 7 Habits (Stephen Covey)
 
 ## Connection String for Backend

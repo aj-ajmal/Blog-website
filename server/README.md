@@ -15,7 +15,7 @@ Professional Node.js/Express API that replaces json-server with a production-rea
 
 ### Health Check
 ```
-GET / 
+GET /
 Response: API information and available endpoints
 ```
 
@@ -72,6 +72,6 @@ Visit http://localhost:8000 to see API documentation
 ## Deployment Ready
 This backend is optimized for Render deployment with:
 - Environment variable configuration
-- Production error handling  
+- Production error handling
 - CORS setup for frontend integration
 - Health check endpoint

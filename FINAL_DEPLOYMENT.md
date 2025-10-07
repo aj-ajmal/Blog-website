@@ -61,6 +61,6 @@ Your blog is now live and ready to share with the world! This is a professional 
 
 **Technologies Used:**
 - Frontend: React, Vite, Tailwind CSS, React Router
-- Backend: Node.js, Express, MongoDB, Mongoose  
+- Backend: Node.js, Express, MongoDB, Mongoose
 - Deployment: Render (Frontend & Backend), MongoDB Atlas
 - Version Control: Git, GitHub

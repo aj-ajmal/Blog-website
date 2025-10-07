@@ -6,28 +6,28 @@ const Home = () => {
   const {data:blogs , isPending , error} = useFetch('http://localhost:8000/blogs')
 
   return (
-    <div className="min-h-screen px-4 py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen px-2 py-6 sm:px-4 lg:px-6">
       {/* Hero Section */}
-      <div className="mb-12 text-center">
-        <h1 className="mb-4 text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
+      <div className="mb-8 text-center">
+        <h1 className="mb-3 text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl">
           Welcome to{' '}
           <span className="text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text">
             Aj Blog
           </span>
         </h1>
-        <p className="max-w-2xl mx-auto text-xl text-gray-600">
+        <p className="max-w-xl mx-auto text-lg text-gray-600">
           Discover insightful articles, stories, and thoughts shared by our community
         </p>
       </div>
 
       {/* Error State */}
       {error && (
-        <div className="flex flex-col items-center justify-center py-20">
-          <div className="max-w-md p-8 text-center border border-red-200 rounded-lg bg-red-50">
-            <svg className="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="max-w-md p-6 text-center border border-red-200 rounded-lg bg-red-50">
+            <svg className="w-12 h-12 mx-auto mb-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <h2 className="mb-2 text-2xl font-bold text-red-700">Oops! Something went wrong</h2>
+            <h2 className="mb-2 text-xl font-bold text-red-700">Oops! Something went wrong</h2>
             <p className="text-red-600">{error}</p>
           </div>
         </div>
@@ -35,12 +35,12 @@ const Home = () => {
 
       {/* Loading State */}
       {isPending && (
-        <div className="flex flex-col items-center justify-center py-20">
+        <div className="flex flex-col items-center justify-center py-12">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-spin"></div>
-            <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-blue-600 rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-blue-200 rounded-full animate-spin"></div>
+            <div className="absolute top-0 left-0 w-16 h-16 border-t-4 border-blue-600 rounded-full animate-spin"></div>
           </div>
-          <p className="mt-4 text-lg text-gray-600">Loading amazing content...</p>
+          <p className="mt-3 text-base text-gray-600">Loading amazing content...</p>
         </div>
       )}
 

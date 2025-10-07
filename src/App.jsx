@@ -10,9 +10,9 @@ function App() {
     <BrowserRouter>
       <div className='min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100
       font-["Poppins"]'>
-        <div className='px-4 mx-auto max-w-7xl sm:px-6 lg:px-8'>
+        <div className='px-3 mx-auto max-w-6xl sm:px-4 lg:px-6'>
           <Navbar />
-          <div className=" content">
+          <div className="content">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Create" element={<Create />} />

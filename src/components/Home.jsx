@@ -2,8 +2,8 @@ import BlogList from "../components/BlogList";
 import useFetch from "../components/useFetch";
 
 const Home = () => {
-
-  const {data:blogs , isPending , error} = useFetch('http://localhost:8000/blogs')
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const {data:blogs , isPending , error} = useFetch(`${apiUrl}/blogs`)
 
   return (
     <div className="min-h-screen px-2 py-6 sm:px-4 lg:px-6">

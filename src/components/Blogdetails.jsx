@@ -2,9 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 
 const Blogdetails = () => {
-
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
     const { id } = useParams()
-    const { data: blog, error, isPending } = useFetch('http://localhost:8000/blogs/' + id)
+    const { data: blog, error, isPending } = useFetch(`${apiUrl}/blogs/${id}`)
     const navigate = useNavigate();
 
 
@@ -17,7 +17,7 @@ const Blogdetails = () => {
             alert("This is a default blog and cannot be deleted.");
             return;
         }
-        fetch('http://localhost:8000/blogs/' + blog.id, {
+        fetch(`${apiUrl}/blogs/${blog.id}`, {
             method: "DELETE",
         }).then(() => {
             navigate('/');

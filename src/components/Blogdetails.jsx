@@ -10,18 +10,28 @@ const Blogdetails = () => {
 
     const handleclick = () => {
 
-        const permanentIds = ['1', '2', '3'];
 
+    // First, a safety check to make sure the blog data has loaded
+    if (!blog) {
+        console.error("Delete clicked before blog data was available.");
+        return;
+    }
 
-        if (permanentIds.includes(blog.id.toString())) {
-            alert("This is a default blog and cannot be deleted.");
-            return;
-        }
-        fetch(`${apiUrl}/blogs/${blog._id}`, {
-            method: "DELETE",
-        }).then(() => {
-            navigate('/');
-        });
+    const permanentIds = ['1', '2', '3'];
+
+    // Only check for a permanent ID if the old 'id' field actually exists
+    if (blog.id && permanentIds.includes(blog.id.toString())) {
+        alert("This is a default blog and cannot be deleted.");
+        return;
+    }
+
+    // Proceed with the delete operation using the correct _id
+    fetch(`${apiUrl}/blogs/${blog._id}`, {
+        method: "DELETE",
+    }).then(() => {
+        navigate('/');
+    });
+
     }
 
     return (

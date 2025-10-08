@@ -2,7 +2,7 @@ import { useState } from "react";
 import { data, useNavigate } from "react-router-dom";
 
 const Create = () => {
-  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aj-blog.onrender.com';
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
   const [author, setAuthor] = useState('')

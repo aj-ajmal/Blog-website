@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
 
 const Blogdetails = () => {
-    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aj-blog.onrender.com'; 
     const { id } = useParams()
     const { data: blog, error, isPending } = useFetch(`${apiUrl}/blogs/${id}`)
     const navigate = useNavigate();

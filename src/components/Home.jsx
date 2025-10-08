@@ -2,7 +2,7 @@ import BlogList from "../components/BlogList";
 import useFetch from "../components/useFetch";
 
 const Home = () => {
-  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aj-blog.onrender.com';
   const {data:blogs , isPending , error} = useFetch(`${apiUrl}/blogs`)
 
   return (

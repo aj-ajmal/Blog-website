@@ -7,26 +7,43 @@ const useFetch = (url) => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            fetch(url)
+        if (!url) {
+            setError('No URL provided to useFetch');
+            setIspending(false);
+            return;
+        }
+
+        const controller = new AbortController();
+        const signal = controller.signal;
+
+        // small delay for UX only; keep a reference so we can clear it on cleanup
+        const timer = setTimeout(() => {
+            fetch(url, { signal })
                 .then(res => {
                     if (!res.ok) {
-                        throw Error("could not fetch the data for that resources check the connect....!")
+                        throw new Error(`Could not fetch data (status ${res.status})`);
                     }
-                    return res.json()
+                    return res.json();
                 })
-                .then(data => {
-                    setdata(data)
-                    setIspending(false)
-                    setError(null)
+                .then(payload => {
+                    setdata(payload);
+                    setIspending(false);
+                    setError(null);
                 })
                 .catch(err => {
-                    setError(err.message)
-                    setIspending(false)
-                })
-        }, 500)
-    }, [url])
-   return {data , isPending , error}
-}
+                    if (err.name === 'AbortError') return; // fetch aborted, ignore
+                    setError(err.message || 'An unknown error occurred while fetching');
+                    setIspending(false);
+                });
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
+    }, [url]);
+
+    return { data, isPending, error };
+};
 
 export default useFetch ;

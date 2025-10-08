@@ -25,14 +25,26 @@ app.get('/', (req, res) => {
   });
 });
 
-// Connect to MongoDB
-const connectDB = async () => {
+// Connect to MongoDB with retry and without exiting process on failure
+const connectDB = async (retries = 5, delay = 5000) => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ MongoDB connected successfully!');
+    dbConnected = true;
+    return true;
   } catch (error) {
+    dbConnected = false;
     console.error('❌ MongoDB connection error:', error.message);
-    process.exit(1);
+
+    if (retries > 0) {
+      console.log(`Retrying MongoDB connection in ${delay / 1000}s... (${retries} retries left)`);
+      // wait and retry
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      return connectDB(retries - 1, delay);
+    }
+
+    console.error('⚠️  Could not connect to MongoDB after multiple attempts. Server will continue running but DB operations will fail until connection is available.');
+    return false;
   }
 };
 
@@ -75,6 +87,18 @@ const blogSchema = new mongoose.Schema({
 const Blog = mongoose.model('Blog', blogSchema);
 
 // API Routes
+
+// Health check endpoint that returns DB connection status
+let dbConnected = false;
+app.get('/health', (req, res) => {
+  const state = mongoose.connection.readyState; // 0 = disconnected, 1 = connected
+  res.json({
+    status: 'ok',
+    dbConnected,
+    mongooseState: state
+  });
+});
+
 
 // GET /blogs - Get all blogs
 app.get('/blogs', async (req, res) => {

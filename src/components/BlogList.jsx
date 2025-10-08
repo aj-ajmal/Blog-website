@@ -16,7 +16,7 @@ const BlogList = ({ blogs, title }) => {
       <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog) => (
           <div
-            key={blog.id}
+            key={blog._id}
             className="overflow-hidden transition-all duration-300 transform bg-white border border-gray-100 rounded-lg shadow-md group hover:shadow-lg hover:border-blue-200 hover:-translate-y-1"
           >
             <Link to={`/blogs/${blog._id}`} className="block">

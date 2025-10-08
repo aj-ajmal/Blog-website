@@ -17,9 +17,9 @@ const BlogList = ({ blogs, title }) => {
         {blogs.map((blog) => (
           <div
             key={blog.id}
-            className="overflow-hidden transition-all duration-300 transform bg-white border border-gray-100 shadow-md group rounded-lg hover:shadow-lg hover:border-blue-200 hover:-translate-y-1"
+            className="overflow-hidden transition-all duration-300 transform bg-white border border-gray-100 rounded-lg shadow-md group hover:shadow-lg hover:border-blue-200 hover:-translate-y-1"
           >
-            <Link to={`/blogs/${blog.id}`} className="block">
+            <Link to={`/blogs/${blog._id}`} className="block">
               {/* Card Header with Gradient */}
               <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500"></div>
 

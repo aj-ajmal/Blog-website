@@ -11,7 +11,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "render-build": "npm ci && vite build"
+    "render-build": "rm -rf node_modules package-lock.json && npm install && vite build"
   },
   "dependencies": {
     "react": "^19.1.1",

@@ -1,6 +1,7 @@
-// 1. IMPORT 'Link' AT THE TOP
+// 1. IMPORT useState AT THE TOP
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
+import { useState } from "react"; // <-- IMPORT useState
 
 const Blogdetails = () => {
     const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aj-blog.onrender.com';
@@ -8,26 +9,49 @@ const Blogdetails = () => {
     const { data: blog, error, isPending } = useFetch(`${apiUrl}/blogs/${id}`)
     const navigate = useNavigate();
 
+    // 2. ADD STATE FOR THE MODAL
+    const [showConfirm, setShowConfirm] = useState(false); // <-- ADD THIS STATE
 
+    // 3. MODIFY handleclick TO *OPEN* THE MODAL
     const handleclick = () => {
-        // First, a safety check to make sure the blog data has loaded
+        // First, a safety check
         if (!blog) {
             console.error("Delete clicked before blog data was available.");
             return;
         }
 
-        // 2. THE PERMANENT ID CHECK IS NOW MOVED TO THE JSX (SEE BELOW)
-        // SO WE CAN JUST PROCEED WITH THE DELETE
+        const permanentIds = ['1', '2', '3'];
+
+        // Permanent blog check
+        if (blog.id && permanentIds.includes(blog.id.toString())) {
+            alert("This is a default blog and cannot be deleted.");
+            return;
+        }
+
+        // --- THIS IS THE CHANGE ---
+        // Instead of deleting, just show the confirmation modal
+        setShowConfirm(true);
+    }
+
+    // 4. CREATE A NEW FUNCTION FOR THE ACTUAL DELETION
+    const confirmDelete = () => {
         fetch(`${apiUrl}/blogs/${blog._id}`, {
             method: "DELETE",
         }).then(() => {
+            // Close the modal and navigate home
+            setShowConfirm(false);
             navigate('/');
         });
     }
 
-    // 2. ADDED THIS LOGIC HERE TO USE IN THE JSX
+    // 5. CREATE A FUNCTION TO CANCEL
+    const cancelDelete = () => {
+        setShowConfirm(false);
+    }
+
+
+    // --- (Previous logic for permanent IDs) ---
     const permanentIds = ['1', '2', '3'];
-    // Check if the blog is a permanent one (only after blog has loaded)
     const isPermanent = blog && blog.id && permanentIds.includes(blog.id.toString());
 
     return (
@@ -36,6 +60,7 @@ const Blogdetails = () => {
                 {/* Loading State */}
                 {isPending && (
                     <div className="flex flex-col items-center justify-center py-20">
+                        {/* THIS IS YOUR RESTORED LOADING SPINNER */}
                         <div className="relative">
                             <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-spin"></div>
                             <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-blue-600 rounded-full animate-spin"></div>
@@ -47,6 +72,7 @@ const Blogdetails = () => {
                 {/* Error State */}
                 {error && (
                     <div className="flex flex-col items-center justify-center py-20">
+                        {/* THIS IS YOUR RESTORED ERROR MESSAGE */}
                         <div className="max-w-md p-8 text-center border border-red-200 rounded-lg bg-red-50">
                             <svg className="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -62,11 +88,10 @@ const Blogdetails = () => {
                     <article className="overflow-hidden bg-white border border-gray-100 shadow-xl rounded-2xl">
                         {/* Header with gradient */}
                         <div className="px-8 py-12 text-center bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500">
+                            {/* THIS IS YOUR RESTORED HEADER CONTENT */}
                             <h1 className="mb-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
                                 {blog.title}
                             </h1>
-
-                            {/* Author and Date Info */}
                             <div className="flex flex-col items-center justify-center space-y-2 text-blue-100 sm:flex-row sm:space-y-0 sm:space-x-6">
                                 <div className="flex items-center">
                                     <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -74,7 +99,6 @@ const Blogdetails = () => {
                                     </svg>
                                     <span className="text-lg font-medium">By {blog.author}</span>
                                 </div>
-
                                 {blog.publishdate && (
                                     <div className="flex items-center">
                                         <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -92,16 +116,13 @@ const Blogdetails = () => {
 
                         {/* Blog Content */}
                         <div className="px-8 py-12">
-                            {/* Blog About Section */}
+                            {/* THIS IS YOUR RESTORED BODY CONTENT */}
                             {blog.about && (
                                 <div className="p-6 mb-8 border-l-4 border-blue-500 bg-blue-50 rounded-xl">
                                     <h2 className="mb-2 text-xl font-semibold text-blue-900">About this article</h2>
                                     <p className="leading-relaxed text-blue-800">{blog.about}</p>
-
                                 </div>
                             )}
-
-                            {/* Main Blog Body */}
                             <div className="prose prose-lg max-w-none">
                                 <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-line">
                                     {blog.body}
@@ -123,15 +144,13 @@ const Blogdetails = () => {
                                     Back to Home
                                 </button>
 
-                                {/* 3. ADDED EDIT/DELETE BUTTON GROUP */}
+                                {/* Edit/Delete Button Group */}
                                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                                     {isPermanent ? (
-                                        // If blog is permanent, show this message
                                         <p className="text-sm text-gray-500">This default blog cannot be edited or deleted.</p>
                                     ) : (
-                                        // Otherwise, show the Edit and Delete buttons
                                         <>
-                                            {/* NEW EDIT BUTTON */}
+                                            {/* Edit Button */}
                                             <Link
                                                 to={`/edit/${blog._id}`}
                                                 className="inline-flex items-center justify-center px-6 py-3 text-white transition-all duration-300 bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -142,10 +161,10 @@ const Blogdetails = () => {
                                                 Edit Blog
                                             </Link>
 
-                                            {/* Existing Delete Button */}
+                                            {/* Delete Button (now opens modal) */}
                                             <button
                                                 className="inline-flex items-center px-6 py-3 text-white transition-all duration-300 bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                                                onClick={handleclick}
+                                                onClick={handleclick} // <-- This now calls setShowConfirm(true)
                                             >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -160,6 +179,40 @@ const Blogdetails = () => {
                     </article>
                 )}
             </div>
+
+            {/* 6. ADD THE MODAL JSX (STYLED WITH TAILWIND) */}
+            {showConfirm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+                    <div className="w-full max-w-md p-6 mx-4 bg-white shadow-xl rounded-2xl">
+                        <div className="text-center">
+                            <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <h3 className="mt-4 text-2xl font-bold text-gray-900">
+                                Delete Blog Post?
+                            </h3>
+                            <p className="mt-2 text-base text-gray-600">
+                                Are you sure you want to delete this blog? This action cannot be undone.
+                            </p>
+                        </div>
+                        <div className="flex justify-center mt-8 space-x-4">
+                            <button
+                                onClick={cancelDelete}
+                                className="px-6 py-3 font-medium text-gray-700 transition-all duration-300 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmDelete}
+                                className="px-6 py-3 font-medium text-white transition-all duration-300 bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

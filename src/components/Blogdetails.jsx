@@ -1,7 +1,6 @@
-// 1. IMPORT useState AT THE TOP
+// 1. IMPORT 'Link' AT THE TOP
 import { Link, useNavigate, useParams } from "react-router-dom";
 import useFetch from "./useFetch";
-import { useState } from "react"; // <-- IMPORT useState
 
 const Blogdetails = () => {
     const apiUrl = import.meta.env.VITE_API_BASE_URL || 'https://aj-blog.onrender.com';
@@ -9,49 +8,26 @@ const Blogdetails = () => {
     const { data: blog, error, isPending } = useFetch(`${apiUrl}/blogs/${id}`)
     const navigate = useNavigate();
 
-    // 2. ADD STATE FOR THE MODAL
-    const [showConfirm, setShowConfirm] = useState(false); // <-- ADD THIS STATE
 
-    // 3. MODIFY handleclick TO *OPEN* THE MODAL
     const handleclick = () => {
-        // First, a safety check
+        // First, a safety check to make sure the blog data has loaded
         if (!blog) {
             console.error("Delete clicked before blog data was available.");
             return;
         }
 
-        const permanentIds = ['1', '2', '3'];
-
-        // Permanent blog check
-        if (blog.id && permanentIds.includes(blog.id.toString())) {
-            alert("This is a default blog and cannot be deleted.");
-            return;
-        }
-
-        // --- THIS IS THE CHANGE ---
-        // Instead of deleting, just show the confirmation modal
-        setShowConfirm(true);
-    }
-
-    // 4. CREATE A NEW FUNCTION FOR THE ACTUAL DELETION
-    const confirmDelete = () => {
+        // 2. THE PERMANENT ID CHECK IS NOW MOVED TO THE JSX (SEE BELOW)
+        // SO WE CAN JUST PROCEED WITH THE DELETE
         fetch(`${apiUrl}/blogs/${blog._id}`, {
             method: "DELETE",
         }).then(() => {
-            // Close the modal and navigate home
-            setShowConfirm(false);
             navigate('/');
         });
     }
 
-    // 5. CREATE A FUNCTION TO CANCEL
-    const cancelDelete = () => {
-        setShowConfirm(false);
-    }
-
-
-    // --- (Previous logic for permanent IDs) ---
+    // 2. ADDED THIS LOGIC HERE TO USE IN THE JSX
     const permanentIds = ['1', '2', '3'];
+    // Check if the blog is a permanent one (only after blog has loaded)
     const isPermanent = blog && blog.id && permanentIds.includes(blog.id.toString());
 
     return (
@@ -60,21 +36,78 @@ const Blogdetails = () => {
                 {/* Loading State */}
                 {isPending && (
                     <div className="flex flex-col items-center justify-center py-20">
-                        {/* ... (your loading spinner) ... */}
+                        <div className="relative">
+                            <div className="w-20 h-20 border-4 border-blue-200 rounded-full animate-spin"></div>
+                            <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-blue-600 rounded-full animate-spin"></div>
+                        </div>
+                        <p className="mt-4 text-lg text-gray-600">Loading blog post...</p>
                     </div>
                 )}
 
                 {/* Error State */}
                 {error && (
                     <div className="flex flex-col items-center justify-center py-20">
-                        {/* ... (your error message) ... */}
+                        <div className="max-w-md p-8 text-center border border-red-200 rounded-lg bg-red-50">
+                            <svg className="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <h2 className="mb-2 text-2xl font-bold text-red-700">Oops! Something went wrong</h2>
+                            <p className="text-red-600">{error}</p>
+                        </div>
                     </div>
                 )}
 
                 {/* Blog Content */}
                 {blog && (
                     <article className="overflow-hidden bg-white border border-gray-100 shadow-xl rounded-2xl">
-                        {/* ... (your existing article code) ... */}
+                        {/* Header with gradient */}
+                        <div className="px-8 py-12 text-center bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-500">
+                            <h1 className="mb-4 text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl">
+                                {blog.title}
+                            </h1>
+
+                            {/* Author and Date Info */}
+                            <div className="flex flex-col items-center justify-center space-y-2 text-blue-100 sm:flex-row sm:space-y-0 sm:space-x-6">
+                                <div className="flex items-center">
+                                    <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                    </svg>
+                                    <span className="text-lg font-medium">By {blog.author}</span>
+                                </div>
+
+                                {blog.publishdate && (
+                                    <div className="flex items-center">
+                                        <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
+                                        </svg>
+                                        <span>Published on {new Date(blog.publishdate).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Blog Content */}
+                        <div className="px-8 py-12">
+                            {/* Blog About Section */}
+                            {blog.about && (
+                                <div className="p-6 mb-8 border-l-4 border-blue-500 bg-blue-50 rounded-xl">
+                                    <h2 className="mb-2 text-xl font-semibold text-blue-900">About this article</h2>
+                                    <p className="leading-relaxed text-blue-800">{blog.about}</p>
+
+                                </div>
+                            )}
+
+                            {/* Main Blog Body */}
+                            <div className="prose prose-lg max-w-none">
+                                <div className="text-lg leading-relaxed text-gray-800 whitespace-pre-line">
+                                    {blog.body}
+                                </div>
+                            </div>
+                        </div>
 
                         {/* Footer Actions */}
                         <div className="px-8 py-6 border-t border-gray-200 bg-gray-50">
@@ -90,13 +123,15 @@ const Blogdetails = () => {
                                     Back to Home
                                 </button>
 
-                                {/* Edit/Delete Button Group */}
+                                {/* 3. ADDED EDIT/DELETE BUTTON GROUP */}
                                 <div className="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                                     {isPermanent ? (
+                                        // If blog is permanent, show this message
                                         <p className="text-sm text-gray-500">This default blog cannot be edited or deleted.</p>
                                     ) : (
+                                        // Otherwise, show the Edit and Delete buttons
                                         <>
-                                            {/* Edit Button */}
+                                            {/* NEW EDIT BUTTON */}
                                             <Link
                                                 to={`/edit/${blog._id}`}
                                                 className="inline-flex items-center justify-center px-6 py-3 text-white transition-all duration-300 bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -107,10 +142,10 @@ const Blogdetails = () => {
                                                 Edit Blog
                                             </Link>
 
-                                            {/* Delete Button (now opens modal) */}
+                                            {/* Existing Delete Button */}
                                             <button
                                                 className="inline-flex items-center px-6 py-3 text-white transition-all duration-300 bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                                                onClick={handleclick} // <-- This now calls setShowConfirm(true)
+                                                onClick={handleclick}
                                             >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -125,40 +160,6 @@ const Blogdetails = () => {
                     </article>
                 )}
             </div>
-
-            {/* 6. ADD THE MODAL JSX (STYLED WITH TAILWIND) */}
-            {showConfirm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-                    <div className="w-full max-w-md p-6 mx-4 bg-white shadow-xl rounded-2xl">
-                        <div className="text-center">
-                            <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                            <h3 className="mt-4 text-2xl font-bold text-gray-900">
-                                Delete Blog Post?
-                            </h3>
-                            <p className="mt-2 text-base text-gray-600">
-                                Are you sure you want to delete this blog? This action cannot be undone.
-                            </p>
-                        </div>
-                        <div className="flex justify-center mt-8 space-x-4">
-                            <button
-                                onClick={cancelDelete}
-                                className="px-6 py-3 font-medium text-gray-700 transition-all duration-300 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={confirmDelete}
-                                className="px-6 py-3 font-medium text-white transition-all duration-300 bg-red-600 border border-transparent rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
         </div>
     );
 }
